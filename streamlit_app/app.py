@@ -131,6 +131,9 @@ if mode == "Single Algorithm Run":
                     alg = GSA(selected_func, dim, max_evals, **params)
                 elif selected_alg == 'ABC':
                     alg = ABC(selected_func, dim, max_evals, **params)
+                else:
+                    st.error(f"Unknown algorithm: {selected_alg}")
+                    st.stop()
                 
                 best_fit, best_sol, history = alg.run()
                 
@@ -220,6 +223,9 @@ elif mode == "Algorithm Comparison":
                             alg = GSA(selected_func, dim, max_evals)
                         elif alg_name == 'ABC':
                             alg = ABC(selected_func, dim, max_evals)
+                        else:
+                            st.error(f"Unknown algorithm: {alg_name}")
+                            st.stop()
                         
                         best_fit, _, history = alg.run()
                         fitness_values.append(best_fit)

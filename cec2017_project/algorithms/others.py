@@ -9,7 +9,7 @@ class Algorithm:
         self.ub = ub
         self.eval_count = 0
         self.best_fitness_history = []
-        self.best_solution = None
+        self.best_solution = np.zeros(self.dim)
         self.best_fitness = float('inf')
 
     def evaluate(self, solution):
@@ -91,11 +91,7 @@ class GA(Algorithm):
                     break
 
                 # Selection (Tournament)
-                p1 = population[np.random.randint(0, self.pop_size)]
-                p2 = population[np.random.randint(0, self.pop_size)]
-                parent1 = p1 if self.evaluate(p1) < self.evaluate(p2) else p2 # Note: this re-evaluates, which is bad for budget. 
-                # Let's use stored fitnesses for selection to save evaluations
-                
+                # We use stored fitnesses to avoid re-evaluation
                 idx1, idx2 = np.random.randint(0, self.pop_size, 2)
                 parent1 = population[idx1] if fitnesses[idx1] < fitnesses[idx2] else population[idx2]
                 

@@ -12,11 +12,11 @@ class HarmonySearch:
         self.lb = lb
         self.ub = ub
         
-        self.HM = None
-        self.fitness = None
+        self.HM = np.zeros((self.hms, self.dim))
+        self.fitness = np.full(self.hms, float('inf'))
         self.eval_count = 0
         self.best_fitness_history = []
-        self.best_solution = None
+        self.best_solution = np.zeros(self.dim)
         self.best_fitness = float('inf')
 
     def initialize(self):
