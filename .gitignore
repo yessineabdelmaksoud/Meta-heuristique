@@ -46,3 +46,12 @@ cec2017-py/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc

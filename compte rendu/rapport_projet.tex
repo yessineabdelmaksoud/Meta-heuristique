@@ -1,0 +1,136 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+% Configuration des marges pour tenir sur 5 pages max
+\geometry{hmargin=2.5cm,vmargin=2.5cm}
+
+% Titre et Auteurs
+\title{\textbf{Analyse Comparative d'Algorithmes Méta-heuristiques sur le Benchmark CEC2017}}
+\author{Yessine Abdelmaksoud \& Med Ali Abid}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Ce rapport présente une étude comparative de trois algorithmes d'optimisation méta-heuristiques : l'Optimisation par Essaim Particulaire (PSO) standard, une version Hybride de PSO (avec mutation gaussienne), et un Algorithme Génétique (GA). Ces algorithmes ont été évalués sur une sélection de fonctions du benchmark standard CEC2017 (f2, f4, f12, f25) en dimension 30. Les résultats démontrent les forces et faiblesses théoriques de chaque approche, illustrant notamment le compromis entre vitesse de convergence et capacité d'exploration.
+\end{abstract}
+
+\section{Introduction}
+L'optimisation globale de fonctions complexes est un défi majeur en ingénierie et en recherche opérationnelle. Lorsque les méthodes déterministes échouent face à des espaces de recherche vastes et accidentés (nombreux optima locaux), les méta-heuristiques offrent une alternative efficace inspirée par des processus naturels.
+
+L'objectif de ce projet est d'implémenter et de comparer les performances de trois approches distinctes sur le benchmark \textbf{CEC2017}, reconnu pour sa difficulté et sa diversité de problèmes (fonctions unimodales, multimodales, hybrides et composites).
+
+\section{Méthodologie et Algorithmes}
+
+\subsection{Algorithmes Étudiés}
+
+\subsubsection{1. Optimisation par Essaim Particulaire (PSO Standard)}
+Le PSO simule le comportement social d'un essaim (oiseaux, poissons). Chaque particule $i$ possède une position $x_i$ et une vitesse $v_i$. Elle ajuste sa trajectoire en fonction de :
+\begin{itemize}
+    \item Son inertie ($w$).
+    \item Sa meilleure position personnelle ($p_{best}$).
+    \item La meilleure position globale de l'essaim ($g_{best}$).
+\end{itemize}
+\textbf{Avantage théorique :} Convergence très rapide. \\
+\textbf{Inconvénient :} Risque élevé de stagnation dans des optima locaux (convergence prématurée).
+
+\subsubsection{2. PSO Hybride (avec Mutation Gaussienne)}
+Pour pallier le défaut du PSO standard, nous avons implémenté une variante hybride. Une mutation gaussienne est appliquée aléatoirement sur certaines particules à chaque itération.
+$$ x_{new} = x_{old} + \mathcal{N}(0, \sigma) $$
+Cette perturbation injecte de la diversité et permet à l'essaim de "sauter" hors des vallées locales pour explorer de nouvelles zones prometteuses.
+
+\subsubsection{3. Algorithme Génétique (GA)}
+Inspiré de l'évolution darwinienne, le GA manipule une population de solutions via trois opérateurs :
+\begin{itemize}
+    \item \textbf{Sélection :} Les meilleurs individus survivent (tournoi ou élitisme).
+    \item \textbf{Croisement :} Combinaison des gènes de deux parents.
+    \item \textbf{Mutation :} Modification aléatoire d'un gène pour maintenir la diversité.
+\end{itemize}
+Le GA est réputé pour sa robustesse et sa capacité à explorer globalement l'espace, bien qu'il soit souvent plus lent à converger que le PSO.
+
+\subsection{Protocole Expérimental}
+Les tests ont été réalisés avec les paramètres suivants :
+\begin{itemize}
+    \item \textbf{Benchmark :} CEC2017 (Fonctions f2, f4, f12, f25).
+    \item \textbf{Dimension (D) :} 30.
+    \item \textbf{Population :} 30 individus/particules.
+    \item \textbf{Budget :} 1000 itérations (soit 30 000 évaluations).
+    \item \textbf{Bornes :} $[-100, 100]$.
+\end{itemize}
+
+\section{Implémentation Technique}
+Le projet a été développé en \textbf{Python 3.12}.
+\begin{itemize}
+    \item \textbf{Noyau de calcul :} Utilisation de \texttt{NumPy} pour la vectorisation des opérations, garantissant une exécution rapide.
+    \item \textbf{Benchmark :} Intégration de la librairie \texttt{cec2017-py} (bindings C) pour une évaluation précise des fonctions.
+    \item \textbf{Interface :} Développement d'une application web interactive avec \texttt{Streamlit} pour la visualisation en temps réel.
+\end{itemize}
+
+\section{Analyse des Résultats}
+
+Les courbes de convergence (échelle logarithmique) obtenues sur les fonctions f2, f4, f12 et f25 révèlent des comportements caractéristiques très intéressants.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../convergence_F2.png}
+        \caption{Convergence sur F2}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../convergence_F4.png}
+        \caption{Convergence sur F4}
+    \end{minipage}
+    
+    \vspace{0.5cm}
+    
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../convergence_F12.png}
+        \caption{Convergence sur F12}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../convergence_F25.png}
+        \caption{Convergence sur F25}
+    \end{minipage}
+    \caption{Comparaison des courbes de convergence (échelle log)}
+\end{figure}
+
+\subsection{Analyse Comparative}
+
+\subsubsection{Performance du PSO Standard (Courbe Bleue)}
+Comme prédit par la théorie, le PSO standard est le "sprinter" du groupe. Sur presque toutes les fonctions, sa courbe chute brutalement dès les premières itérations. Cependant, on observe systématiquement un phénomène de \textbf{stagnation} (la courbe devient plate). L'essaim perd sa diversité trop vite et reste piégé dans un optimum local.
+
+\subsubsection{Performance du GA (Courbe Verte)}
+L'Algorithme Génétique adopte une stratégie de "marathonien". Sa convergence est plus lente et progressive (pente régulière).
+\begin{itemize}
+    \item Sur des fonctions très accidentées comme \textbf{f12}, cette lenteur est un atout : le GA continue d'améliorer sa solution longtemps après que le PSO a abandonné. Il finit par dépasser le PSO sur le long terme.
+    \item Cela confirme la robustesse du GA et sa capacité à maintenir la diversité de la population.
+\end{itemize}
+
+\subsubsection{Performance du PSO Hybride (Courbe Orange)}
+Le PSO Hybride démontre la meilleure performance globale.
+\begin{itemize}
+    \item Il profite de la vitesse initiale du PSO.
+    \item Lorsque le PSO standard stagne, la mutation gaussienne permet au PSO Hybride de "casser" le plancher et de continuer à descendre (visible nettement sur \textbf{f4} et \textbf{f25}).
+    \item Il réussit à combiner la vitesse d'exploitation du PSO avec la capacité d'exploration (sortie d'optima locaux) apportée par la mutation.
+\end{itemize}
+
+\section{Conclusion}
+Ce projet nous a permis de vérifier expérimentalement le théorème du \textit{"No Free Lunch"} : aucun algorithme n'est supérieur sur tous les problèmes (le GA bat le PSO sur f12, mais le PSO Hybride est souvent meilleur ailleurs).
+
+Néanmoins, l'hybridation s'avère être une stratégie puissante. En ajoutant un mécanisme stochastique simple (mutation) à un algorithme rapide mais "gourmand" (PSO), nous avons pu corriger son défaut majeur de convergence prématurée, obtenant ainsi un optimiseur plus performant et polyvalent pour les fonctions complexes du CEC2017.
+
+\end{document}
